@@ -1,20 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Camera, CameraType, FaceDetectorLandmarks, FaceDetectorMode, FaceDetectorClassifications } from 'expo-camera';
+import { useState } from 'react';
+import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import CameraPage from './Camera';
+import ImageEditor from './ImageEditor';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  const [captured, setCaptured] = useState('');
+
+  // Based on whether an image is captured/selected, use camera view or image editor view.
+  if (captured === '') {
+    return <SafeAreaView style={styles.container}><CameraPage capture={setCaptured}/></SafeAreaView>;
+  } else {
+    return <SafeAreaView style={styles.container}><ImageEditor image={captured} reset={() => setCaptured('')}/></SafeAreaView> ;
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
