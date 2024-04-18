@@ -1,8 +1,14 @@
-import { Camera, CameraType, FaceDetectorLandmarks, FaceDetectorMode, FaceDetectorClassifications } from 'expo-camera';
+
+/* 
+ * StAuth10244: I Zhongwen Zhou, 904509 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else."
+ */
+
 import { useState } from 'react';
-import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView} from 'react-native';
 import CameraPage from './Camera';
 import ImageEditor from './ImageEditor';
+
+const styles = require('./styles');
 
 export default function App() {
   const [captured, setCaptured] = useState('');

@@ -1,23 +1,26 @@
+
+/* 
+ * StAuth10244: I Zhongwen Zhou, 904509 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else."
+ */
+
 import React, { useState } from 'react';
-import { Button, Image, ImageBackground, PermissionsAndroid, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import { ImageBackground, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Modal, Pressable, Text } from 'react-native';
-import { modalVisible, setModalVisible } from 'expo-constants';
-import { StyleSheet } from 'react-native';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import * as MediaLibrary from 'expo-media-library';
 
+const styles = require('./styles');
 
 export default function ImageEditor(props) {
     const [image, setImage] = useState(props.image);
     const [modalVisible, setModalVisible] = useState(false);
-    const [x, setX] = useState('600');
-    const [y, setY] = useState('800');
+    const [x, setX] = useState(String(props.image.width));
+    const [y, setY] = useState(String(props.image.height));
 
     // Save the image to the device's media library
     function saveImage() {
-        MediaLibrary.saveToLibraryAsync(image);
+        MediaLibrary.saveToLibraryAsync(image.uri);
         alert('Image saved to gallery');
         props.reset();
     }
@@ -25,36 +28,37 @@ export default function ImageEditor(props) {
     // Resize the image with the provided x/y dimensions
     async function resize() {
         const manipResult = await manipulateAsync(
-            image,
+            image.uri,
             [{ resize: { width: Number(x), height: Number(y) } }],
             { compress: 1, format: SaveFormat.JPEG }
         );
-        setImage(manipResult.uri);
+        console.log(manipResult);
+        setImage(manipResult);
         setModalVisible(false);
     }
 
     // Flip the image horizontally
     async function flip() {
         const manipResult = await manipulateAsync(
-            image,
+            image.uri,
             [{ flip: FlipType.Horizontal }],
             { compress: 1, format: SaveFormat.JPEG }
         );
-        setImage(manipResult.uri);
+        setImage(manipResult);
     }
 
     // Rotate the image 90 degrees
     async function rotate() {
         const manipResult = await manipulateAsync(
-            image,
+            image.uri,
             [{ rotate: 90 }],
             { compress: 1, format: SaveFormat.JPEG }
         );
-        setImage(manipResult.uri);
+        setImage(manipResult);
     }
 
     return (
-        <ImageBackground source={{ uri: image }} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={{ uri: image.uri }} resizeMode='contain' style={styles.image}>
             <View>
                 <Modal
                     animationType="slide"
@@ -102,70 +106,4 @@ export default function ImageEditor(props) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-    image: {
-        flex: 1,
-        borderRadius: 10,
-        margin: 10,
-        padding: 10,
-        justifyContent: 'flex-end',
-    },
-    controls: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-    formInput: {
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 10,
-        margin: 10,
-    },
 
-});

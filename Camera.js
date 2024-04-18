@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Camera, CameraType, FaceDetectorLandmarks, FaceDetectorMode, FaceDetectorClassifications, AutoFocus } from 'expo-camera';
-import { Camera as CameraComponent } from 'expo-camera';
+
+/* 
+ * StAuth10244: I Zhongwen Zhou, 904509 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else."
+ */
+
+import React, { useState } from 'react';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Camera, CameraType, AutoFocus } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+
+
+const styles = require('./styles');
 
 
 export default function CameraPage(props) {
@@ -40,7 +47,7 @@ export default function CameraPage(props) {
         });
 
         if (!result.canceled) {
-            props.capture(result.assets[0].uri);
+            props.capture(result.assets[0]);
         }
 
     }
@@ -57,7 +64,7 @@ export default function CameraPage(props) {
         if (!onCameraReady && camera != null) {
             camera.takePictureAsync().then(data => {
                 console.log(data);
-                props.capture(data.uri);
+                props.capture(data);
             });
         }
     }
@@ -89,29 +96,3 @@ export default function CameraPage(props) {
         </GestureHandlerRootView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    camera: {
-        flex: 1,
-    },
-    buttonContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: 'transparent',
-        margin: 64,
-    },
-    button: {
-        flex: 1,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-});
